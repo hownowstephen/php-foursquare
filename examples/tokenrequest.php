@@ -4,9 +4,9 @@
 	// This file is intended to be used as your redirect_uri for the client on Foursquare
 	
 	// Set your client key and secret
-	$client_key = "GEGMN5Y0JKHM3HA5B0DCTPCK0NPQJJ4JGE1WVBWDIOF0XX3A";
-	$client_secret = "UI0LCMZZYSQGFDVG15LG4D0UYDOZAMF3HO2DIEJMIJS4CVFG";
-	$redirect_uri = "http://tryllo.com/foursquare";
+	$client_key = "<your client key>";
+	$client_secret = "<your client secret>";
+	$redirect_uri = "<your redirect uri>";
 	
 	// Load the Foursquare API library
 	$foursquare = new FoursquareAPI($client_key,$client_secret);
