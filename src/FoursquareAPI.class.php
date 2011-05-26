@@ -63,8 +63,8 @@ class FoursquareApi {
 	}
 	
 	/** 
-	 * GetPublic
-	 * Performs a request for a public resource (is also use
+	 * GetPrivate
+	 * Performs a request for a public resource
 	 * @param String $endpoint A particular endpoint of the Foursquare API
 	 * @param Array $params A set of parameters to be appended to the request, defaults to false (none)
 	 */
