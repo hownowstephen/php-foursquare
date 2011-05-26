@@ -89,7 +89,7 @@ class FoursquareApi {
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL,$url);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER,1);
-		if ( !isset($_SERVER['HTTP_USER_AGENT']) ) {
+		if ( isset($_SERVER['HTTP_USER_AGENT']) ) {
 			curl_setopt($ch, CURLOPT_USERAGENT, $_SERVER['HTTP_USER_AGENT'] );
 		}else {
 			// Handle the useragent like we are Google Chrome
