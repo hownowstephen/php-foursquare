@@ -38,7 +38,7 @@ class FoursquareApi {
 	 * @param String $client_secret
 	 * @param String $version Defaults to v2, appends into the API url
 	 */
-	public function  __construct($client_id,$client_secret,$version="v2"){
+	public function  __construct($client_id = false,$client_secret = false,$version="v2"){
 		$this->BaseUrl = "{$this->BaseUrl}$version/";
 		$this->ClientID = $client_id;
 		$this->ClientSecret = $client_secret;
@@ -53,18 +53,18 @@ class FoursquareApi {
 	 * @param Array $params A set of parameters to be appended to the request, defaults to false (none)
 	 */
 	public function GetPublic($endpoint,$params=false){
+		// Build the endpoint URL
 		$url = $this->BaseUrl . trim($endpoint,"/");
-		if(!$authenticated){
-			// Append the client details
-			$params['client_id'] = $this->ClientID;
-			$params['client_secret'] = $this->ClientSecret;
-		}
+		// Append the client details
+		$params['client_id'] = $this->ClientID;
+		$params['client_secret'] = $this->ClientSecret;
+		// Return the result;
 		return $this->GET($url,$params);
 	}
 	
 	/** 
-	 * GetPublic
-	 * Performs a request for a public resource (is also use
+	 * GetPrivate
+	 * Performs a request for a public resource
 	 * @param String $endpoint A particular endpoint of the Foursquare API
 	 * @param Array $params A set of parameters to be appended to the request, defaults to false (none)
 	 */
@@ -89,8 +89,12 @@ class FoursquareApi {
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL,$url);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER,1);
-		// Handle the useragent like we are Google Chrome
-		curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US) AppleWebKit/525.13 (KHTML, like Gecko) Chrome/0.X.Y.Z Safari/525.13.');
+		if ( isset($_SERVER['HTTP_USER_AGENT']) ) {
+			curl_setopt($ch, CURLOPT_USERAGENT, $_SERVER['HTTP_USER_AGENT'] );
+		}else {
+			// Handle the useragent like we are Google Chrome
+			curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US) AppleWebKit/525.13 (KHTML, like Gecko) Chrome/0.X.Y.Z Safari/525.13.');
+		}
 		curl_setopt($ch , CURLOPT_TIMEOUT, 30);
 		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 		$result=curl_exec($ch);
