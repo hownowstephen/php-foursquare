@@ -141,13 +141,18 @@ class FoursquareApi {
 	 * Leverages the google maps api to generate a lat/lng pair for a given address
 	 * packaged with FoursquareApi to facilitate locality searches.
 	 * @param String $addr An address string accepted by the google maps api
+	 * @return array(lat, lng) || NULL
 	 */
 	public function GeoLocate($addr){
 		$geoapi = "http://maps.googleapis.com/maps/api/geocode/json";
 		$params = array("address"=>$addr,"sensor"=>"false");
 		$response = $this->GET($geoapi,$params);
 		$json = json_decode($response);
-		return array($json->results[0]->geometry->location->lat,$json->results[0]->geometry->location->lng);
+		if ($json->status === "ZERO_RESULTS") {			
+			return array($json->results[0]->geometry->location->lat,$json->results[0]->geometry->location->lng);
+		} else {
+			return NULL;
+		}
 	}
 	
 	/**
