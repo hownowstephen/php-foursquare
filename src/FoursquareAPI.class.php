@@ -149,9 +149,9 @@ class FoursquareApi {
 		$response = $this->GET($geoapi,$params);
 		$json = json_decode($response);
 		if ($json->status === "ZERO_RESULTS") {			
-			return array($json->results[0]->geometry->location->lat,$json->results[0]->geometry->location->lng);
-		} else {
 			return NULL;
+		} else {
+			return array($json->results[0]->geometry->location->lat,$json->results[0]->geometry->location->lng);
 		}
 	}
 	
