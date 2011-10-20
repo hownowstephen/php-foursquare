@@ -9,6 +9,7 @@
  * @license GPLv3 <http://www.gnu.org/licenses/gpl.txt>
  */
 
+// ???
 DEFINE("HTTP_GET","GET");
 DEFINE("HTTP_POST","POST");
 
@@ -18,6 +19,9 @@ DEFINE("HTTP_POST","POST");
  * Foursquare API, as well as the necessary functionality for acquiring an 
  * access token for a user via Foursquare web authentication
  */
+
+class FoursquareApiException extends Exception {}
+
 class FoursquareApi {
 	
 	/** @var String $BaseUrl The base url for the foursquare API */
@@ -31,6 +35,8 @@ class FoursquareApi {
 	private $ClientID;
 	/** @var String $ClientSecret */
 	private $ClientSecret;
+    /** @var String $RedirectUri */
+    protected $RedirectUri;
 	/** @var String $AuthToken */
 	private $AuthToken;
 	
@@ -41,11 +47,16 @@ class FoursquareApi {
 	 * @param String $client_secret
 	 * @param String $version Defaults to v2, appends into the API url
 	 */
-	public function  __construct($client_id = false,$client_secret = false,$version="v2"){
+	public function  __construct($client_id = false,$client_secret = false, $redirect_uri='', $version="v2"){
 		$this->BaseUrl = "{$this->BaseUrl}$version/";
 		$this->ClientID = $client_id;
 		$this->ClientSecret = $client_secret;
+		$this->RedirectUri = $redirect_uri;
 	}
+    
+    public function setRedirectUri( $uri ) {
+		$this->RedirectUri = $uri;
+    }
 	
 	// Request functions
 	
@@ -67,7 +78,7 @@ class FoursquareApi {
 	
 	/** 
 	 * GetPrivate
-	 * Performs a request for a public resource
+	 * Performs a request for a private resource
 	 * @param String $endpoint A particular endpoint of the Foursquare API
 	 * @param Array $params A set of parameters to be appended to the request, defaults to false (none)
 	 * @param bool $POST whether or not to use a POST request
@@ -78,6 +89,23 @@ class FoursquareApi {
 		if(!$POST) return $this->GET($url,$params);	
 		else return $this->POST($url,$params);
 	}
+    
+    public function getResponseFromJsonString($json) {
+        $json = json_decode( $json );
+        if ( !isset( $json->response ) ) {
+            throw new FoursquareApiException( 'Invalid response' );
+        }
+        
+        // Better to check status code and fail gracefully, but not worried about it
+        // ... REALLY, we should be checking the HTTP status code as well, not 
+        // just what the API gives us in it's microformat
+        /*
+        if ( !isset( $json->meta->code ) || 200 !== $json->meta->code ) {
+            throw new FoursquareApiException( 'Invalid response' );
+        }
+        */
+        return $json->response;
+    }
 	
 	/**
 	 * Request
@@ -187,7 +215,10 @@ class FoursquareApi {
 	 * Returns a link to the Foursquare web authentication page.
 	 * @param String $redirect The configured redirect_uri for the provided client credentials
 	 */
-	public function AuthenticationLink($redirect){
+	public function AuthenticationLink($redirect=''){
+        if ( 0 === strlen( $redirect ) ) {
+            $redirect = $this->RedirectUri;
+        }
 		$params = array("client_id"=>$this->ClientID,"response_type"=>"code","redirect_uri"=>$redirect);
 		return $this->MakeUrl($this->AuthUrl,$params);
 	}
@@ -199,7 +230,12 @@ class FoursquareApi {
 	 * @param $code The 'code' parameter provided by the Foursquare webauth callback redirect
 	 * @param $redirect The configured redirect_uri for the provided client credentials
 	 */
-	public function GetToken($code,$redirect){
+	public function GetToken($code,$redirect=''){
+        if ( 0 === strlen( $redirect ) ) {
+            // If we have to use the same URI to request a token as we did for 
+            // the authorization link, why are we not storing it internally?
+            $redirect = $this->RedirectUri;
+        }
 		$params = array("client_id"=>$this->ClientID,
 						"client_secret"=>$this->ClientSecret,
 						"grant_type"=>"authorization_code",
@@ -210,7 +246,4 @@ class FoursquareApi {
 		$this->SetAccessToken($json->access_token);
 		return $json->access_token;
 	}
-	
 }
-
-?>
