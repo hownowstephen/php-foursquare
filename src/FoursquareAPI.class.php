@@ -31,6 +31,10 @@ class FoursquareApi {
 	/** @var String $TokenUrl The url for obtaining an auth token */
 	private $TokenUrl = "https://foursquare.com/oauth2/access_token";
 	
+        // Edited Petr Babicka (babcca@gmail.com) https://developer.foursquare.com/overview/versioning
+        /** @var String $Version YYYYMMDD */
+        private $Version = '20120228'; 
+        
 	/** @var String $ClientID */
 	private $ClientID;
 	/** @var String $ClientSecret */
@@ -72,6 +76,7 @@ class FoursquareApi {
 		// Append the client details
 		$params['client_id'] = $this->ClientID;
 		$params['client_secret'] = $this->ClientSecret;
+                $params['v'] = $this->Version;
 		// Return the result;
 		return $this->GET($url,$params);
 	}
@@ -86,7 +91,8 @@ class FoursquareApi {
 	public function GetPrivate($endpoint,$params=false,$POST=false){
 		$url = $this->BaseUrl . trim($endpoint,"/");
 		$params['oauth_token'] = $this->AuthToken;
-		if(!$POST) return $this->GET($url,$params);	
+		$params['v'] = $this->Version;
+                if(!$POST) return $this->GET($url,$params);	
 		else return $this->POST($url,$params);
 	}
     
@@ -243,7 +249,12 @@ class FoursquareApi {
 						"code"=>$code);
 		$result = $this->GET($this->TokenUrl,$params);
 		$json = json_decode($result);
-		$this->SetAccessToken($json->access_token);
-		return $json->access_token;
+        if (property_exists($json, 'access_token')) {
+            $this->SetAccessToken($json->access_token);
+            return $json->access_token;
+        }
+        else {
+            return 0;
+        }
 	}
 }
