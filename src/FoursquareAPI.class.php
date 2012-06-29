@@ -43,6 +43,8 @@ class FoursquareApi {
     protected $RedirectUri;
 	/** @var String $AuthToken */
 	private $AuthToken;
+	/** @var String $ClientLanguage */
+	private $ClientLanguage;
 	
 	/**
 	 * Constructor for the API
@@ -51,10 +53,11 @@ class FoursquareApi {
 	 * @param String $client_secret
 	 * @param String $version Defaults to v2, appends into the API url
 	 */
-	public function  __construct($client_id = false,$client_secret = false, $redirect_uri='', $version="v2"){
+	public function  __construct($client_id = false,$client_secret = false, $redirect_uri='', $version="v2", $language='en-US'){
 		$this->BaseUrl = "{$this->BaseUrl}$version/";
 		$this->ClientID = $client_id;
 		$this->ClientSecret = $client_secret;
+		$this->ClientLanguage = $language;
 		$this->RedirectUri = $redirect_uri;
 	}
     
@@ -137,7 +140,9 @@ class FoursquareApi {
 		}
 		curl_setopt($ch , CURLOPT_TIMEOUT, 30);
 		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-
+//		$acceptLanguage[] = "Accept-Language:" . $this->ClientLanguage;
+		$acceptLanguage[] = "Accept-Language: de-de";
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $acceptLanguage); 
 		// Populate the data for POST
 		if($type == HTTP_POST){
 			curl_setopt($ch, CURLOPT_POST, 1); 
