@@ -95,6 +95,34 @@ class FoursquareApi {
                 if(!$POST) return $this->GET($url,$params);	
 		else return $this->POST($url,$params);
 	}
+
+	/**
+	 * GetMulti
+	 * Performs a request for up to 5 private or public resources
+	 * @param Array $requests An array of arrays containing the endpoint and a set of parameters
+	 * to be appended to the request, defaults to false (none)
+	 * @param bool $POST whether or not to use a POST request, e.g.  for large request bodies.
+	 * It does not allow you to call endpoints that mutate data.
+	 */
+	public function GetMulti($requests=false,$POST=false){
+		$url = $this->BaseUrl . "multi";		
+		$params = array();
+		$params['oauth_token'] = $this->AuthToken;
+		$params['v'] = $this->Version;		
+		if (is_array($requests)){
+			$request_queries = array();
+			foreach($requests as $request) {
+				$endpoint = $request['endpoint'];
+				unset($request['endpoint']);
+				$query = '/' . $endpoint;
+					if (!empty($request)) $query .= '?' . http_build_query($request);
+				$request_queries[] = $query;
+			}
+			$params['requests'] = implode(',', $request_queries);
+		}
+				if(!$POST) return $this->GET($url,$params);
+		else return $this->POST($url,$params);
+	}
     
     public function getResponseFromJsonString($json) {
         $json = json_decode( $json );
