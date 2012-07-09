@@ -31,16 +31,16 @@ class FoursquareApi {
 	/** @var String $TokenUrl The url for obtaining an auth token */
 	private $TokenUrl = "https://foursquare.com/oauth2/access_token";
 	
-        // Edited Petr Babicka (babcca@gmail.com) https://developer.foursquare.com/overview/versioning
-        /** @var String $Version YYYYMMDD */
-        private $Version = '20120228'; 
-        
+	// Edited Petr Babicka (babcca@gmail.com) https://developer.foursquare.com/overview/versioning
+	/** @var String $Version YYYYMMDD */
+	private $Version = '20120228'; 
+
 	/** @var String $ClientID */
 	private $ClientID;
 	/** @var String $ClientSecret */
 	private $ClientSecret;
-    /** @var String $RedirectUri */
-    protected $RedirectUri;
+	/** @var String $RedirectUri */
+	protected $RedirectUri;
 	/** @var String $AuthToken */
 	private $AuthToken;
 	/** @var String $ClientLanguage */
@@ -53,7 +53,7 @@ class FoursquareApi {
 	 * @param String $client_secret
 	 * @param String $version Defaults to v2, appends into the API url
 	 */
-	public function  __construct($client_id = false,$client_secret = false, $redirect_uri='', $version="v2", $language='en-US'){
+	public function  __construct($client_id = false,$client_secret = false, $redirect_uri='', $version='v2', $language='en'){
 		$this->BaseUrl = "{$this->BaseUrl}$version/";
 		$this->ClientID = $client_id;
 		$this->ClientSecret = $client_secret;
@@ -61,9 +61,9 @@ class FoursquareApi {
 		$this->RedirectUri = $redirect_uri;
 	}
     
-    public function setRedirectUri( $uri ) {
+	public function setRedirectUri( $uri ) {
 		$this->RedirectUri = $uri;
-    }
+	}
 	
 	// Request functions
 	
@@ -79,7 +79,8 @@ class FoursquareApi {
 		// Append the client details
 		$params['client_id'] = $this->ClientID;
 		$params['client_secret'] = $this->ClientSecret;
-                $params['v'] = $this->Version;
+		$params['v'] = $this->Version;
+		$params['locale'] = $this->ClientLanguage;
 		// Return the result;
 		return $this->GET($url,$params);
 	}
@@ -95,26 +96,27 @@ class FoursquareApi {
 		$url = $this->BaseUrl . trim($endpoint,"/");
 		$params['oauth_token'] = $this->AuthToken;
 		$params['v'] = $this->Version;
-                if(!$POST) return $this->GET($url,$params);	
+		$params['locale'] = $this->ClientLanguage;
+		if(!$POST) return $this->GET($url,$params);
 		else return $this->POST($url,$params);
 	}
     
-    public function getResponseFromJsonString($json) {
-        $json = json_decode( $json );
-        if ( !isset( $json->response ) ) {
-            throw new FoursquareApiException( 'Invalid response' );
-        }
-        
-        // Better to check status code and fail gracefully, but not worried about it
-        // ... REALLY, we should be checking the HTTP status code as well, not 
-        // just what the API gives us in it's microformat
-        /*
-        if ( !isset( $json->meta->code ) || 200 !== $json->meta->code ) {
-            throw new FoursquareApiException( 'Invalid response' );
-        }
-        */
-        return $json->response;
-    }
+	public function getResponseFromJsonString($json) {
+		$json = json_decode( $json );
+		if ( !isset( $json->response ) ) {
+			throw new FoursquareApiException( 'Invalid response' );
+		}
+
+		// Better to check status code and fail gracefully, but not worried about it
+		// ... REALLY, we should be checking the HTTP status code as well, not 
+		// just what the API gives us in it's microformat
+		/*
+		if ( !isset( $json->meta->code ) || 200 !== $json->meta->code ) {
+			throw new FoursquareApiException( 'Invalid response' );
+		}
+		*/
+		return $json->response;
+	}
 	
 	/**
 	 * Request
@@ -134,17 +136,16 @@ class FoursquareApi {
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER,1);
 		if ( isset($_SERVER['HTTP_USER_AGENT']) ) {
 			curl_setopt($ch, CURLOPT_USERAGENT, $_SERVER['HTTP_USER_AGENT'] );
-		}else {
+		} else {
 			// Handle the useragent like we are Google Chrome
 			curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US) AppleWebKit/525.13 (KHTML, like Gecko) Chrome/0.X.Y.Z Safari/525.13.');
 		}
-		curl_setopt($ch , CURLOPT_TIMEOUT, 30);
+		curl_setopt($ch, CURLOPT_TIMEOUT, 30);
 		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-//		$acceptLanguage[] = "Accept-Language:" . $this->ClientLanguage;
-		$acceptLanguage[] = "Accept-Language: de-de";
+		$acceptLanguage[] = "Accept-Language:" . $this->ClientLanguage;
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $acceptLanguage); 
 		// Populate the data for POST
-		if($type == HTTP_POST){
+		if($type == HTTP_POST) {
 			curl_setopt($ch, CURLOPT_POST, 1); 
 			if($params) curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
 		}
@@ -187,7 +188,7 @@ class FoursquareApi {
 		$params = array("address"=>$addr,"sensor"=>"false");
 		$response = $this->GET($geoapi,$params);
 		$json = json_decode($response);
-		if ($json->status === "ZERO_RESULTS") {			
+		if ($json->status === "ZERO_RESULTS") {
 			return NULL;
 		} else {
 			return array($json->results[0]->geometry->location->lat,$json->results[0]->geometry->location->lng);
@@ -227,9 +228,9 @@ class FoursquareApi {
 	 * @param String $redirect The configured redirect_uri for the provided client credentials
 	 */
 	public function AuthenticationLink($redirect=''){
-        if ( 0 === strlen( $redirect ) ) {
-            $redirect = $this->RedirectUri;
-        }
+		if ( 0 === strlen( $redirect ) ) {
+			$redirect = $this->RedirectUri;
+		}
 		$params = array("client_id"=>$this->ClientID,"response_type"=>"code","redirect_uri"=>$redirect);
 		return $this->MakeUrl($this->AuthUrl,$params);
 	}
@@ -242,11 +243,11 @@ class FoursquareApi {
 	 * @param $redirect The configured redirect_uri for the provided client credentials
 	 */
 	public function GetToken($code,$redirect=''){
-        if ( 0 === strlen( $redirect ) ) {
-            // If we have to use the same URI to request a token as we did for 
-            // the authorization link, why are we not storing it internally?
-            $redirect = $this->RedirectUri;
-        }
+		if ( 0 === strlen( $redirect ) ) {
+			// If we have to use the same URI to request a token as we did for 
+			// the authorization link, why are we not storing it internally?
+			$redirect = $this->RedirectUri;
+		}
 		$params = array("client_id"=>$this->ClientID,
 						"client_secret"=>$this->ClientSecret,
 						"grant_type"=>"authorization_code",
