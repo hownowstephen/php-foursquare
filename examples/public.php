@@ -33,13 +33,9 @@
 	// Perform a request to a public resource
 	$response = $foursquare->GetPublic("venues/search",$params);
 	$venues = json_decode($response);
-	
-	foreach($venues->response->groups as $group):
 ?>
-
-	<h2><?php echo $group->name; ?></h2>
 	<ul>
-		<?php foreach($group->items as $venue): ?>
+		<?php foreach($venues->response->venues as $venue): ?>
 			<li>
 				<?php 
 					echo $venue->name;
@@ -51,7 +47,5 @@
 			</li>
 		<?php endforeach; ?>
 	</ul>
-
-<?php endforeach; ?>
 </body>
 </html>
