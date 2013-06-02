@@ -28,6 +28,8 @@ class FoursquareApi {
 	private $BaseUrl = "https://api.foursquare.com/";
 	/** @var String $AuthUrl The url for obtaining the auth access code */
 	private $AuthUrl = "https://foursquare.com/oauth2/authenticate";
+  /** @var String $AuthorizeUrl The url for obtaining an auth token, reprompting even if logged in */
+  private $AuthorizeUrl = "https://foursquare.com/oauth2/authorize";
 	/** @var String $TokenUrl The url for obtaining an auth token */
 	private $TokenUrl = "https://foursquare.com/oauth2/access_token";
 	
@@ -263,6 +265,21 @@ class FoursquareApi {
 		return $this->MakeUrl($this->AuthUrl,$params);
 	}
 	
+  /**
+   * AuthorizeLink
+   * Returns a link to the Foursquare web authentication page. Using /authorize will ask the user to
+   * re-authenticate their identity and reauthorize your app while giving the user the option to
+   * login under a different account.
+   * @param String $redirect The configured redirect_uri for the provided client credentials
+   */
+  public function AuthorizeLink($redirect=''){
+    if ( 0 === strlen( $redirect ) ) {
+      $redirect = $this->RedirectUri;
+    }
+    $params = array("client_id"=>$this->ClientID,"response_type"=>"code","redirect_uri"=>$redirect);
+    return $this->MakeUrl($this->AuthorizeUrl,$params);
+  }
+  
 	/**
 	 * GetToken
 	 * Performs a request to Foursquare for a user token, and returns the token, while also storing it
