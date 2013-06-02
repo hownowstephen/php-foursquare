@@ -35,7 +35,7 @@ class FoursquareApi {
 	
 	// Edited Petr Babicka (babcca@gmail.com) https://developer.foursquare.com/overview/versioning
 	/** @var String $Version YYYYMMDD */
-	private $Version = '20120228'; 
+	private $Version;
 
 	/** @var String $ClientID */
 	private $ClientID;
@@ -47,20 +47,24 @@ class FoursquareApi {
 	private $AuthToken;
 	/** @var String $ClientLanguage */
 	private $ClientLanguage;
-	
-	/**
-	 * Constructor for the API
-	 * Prepares the request URL and client api params
-	 * @param String $client_id
-	 * @param String $client_secret
-	 * @param String $version Defaults to v2, appends into the API url
-	 */
-	public function  __construct($client_id = false,$client_secret = false, $redirect_uri='', $version='v2', $language='en'){
+
+    /**
+     * Constructor for the API
+     * Prepares the request URL and client api params
+     * @param bool|String $client_id
+     * @param bool|String $client_secret
+     * @param string $redirect_uri
+     * @param String $version Defaults to v2, appends into the API url
+     * @param string $language
+     * @param string $api_version https://developer.foursquare.com/overview/versioning
+     */
+	public function  __construct($client_id = false,$client_secret = false, $redirect_uri='', $version='v2', $language='en', $api_version='20120228'){
 		$this->BaseUrl = "{$this->BaseUrl}$version/";
 		$this->ClientID = $client_id;
 		$this->ClientSecret = $client_secret;
 		$this->ClientLanguage = $language;
 		$this->RedirectUri = $redirect_uri;
+        $this->Version = $api_version;
 	}
     
 	public function setRedirectUri( $uri ) {
@@ -219,7 +223,7 @@ class FoursquareApi {
 		$response = $this->GET($geoapi,$params);
 		$json = json_decode($response);
 		if ($json->status === "ZERO_RESULTS") {
-			return NULL;
+			return null;
 		} else {
 			return array($json->results[0]->geometry->location->lat,$json->results[0]->geometry->location->lng);
 		}
