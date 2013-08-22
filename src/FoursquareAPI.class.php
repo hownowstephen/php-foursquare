@@ -237,12 +237,7 @@ class FoursquareApi {
 	 * @param Array $params The parameters to pass to the URL
 	 */	
 	private function MakeUrl($url,$params){
-		if(!empty($params) && $params){
-			foreach($params as $k=>$v) $kv[] = "$k=$v";
-			$url_params = str_replace(" ","+",implode('&',$kv));
-			$url = trim($url) . '?' . $url_params;
-		}
-		return $url;
+	    return trim($url) . '?' . http_build_query($params); 
 	}
 	
 	// Access token functions
