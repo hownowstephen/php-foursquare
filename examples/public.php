@@ -80,7 +80,7 @@
 					}
 					else
 						echo '<image class="icon" src="https://foursquare.com/img/categories/building/default_88.png"/>';
-					echo '<a href="'.$venue->canonicalUrl.'" target="_blank"/><b>';
+					echo '<a href="https://foursquare.com/v/'.$venue->id.'" target="_blank"/><b>';
 					echo $venue->name;
 					echo "</b></a><br/>";
 					
