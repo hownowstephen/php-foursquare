@@ -1,5 +1,17 @@
 <?php 
 	require_once("../src/FoursquareAPI.class.php");
+	// Set your client key and secret
+	$client_key = "";
+	$client_secret = "";
+	// Load the Foursquare API library
+
+	if($client_key=="" or $client_secret=="")
+	{
+        echo 'Load client key and client secret from <a href="https://developer.foursquare.com/">foursquare</a>';
+        exit;
+	}
+
+	$foursquare = new FoursquareAPI($client_key,$client_secret);
 	$location = array_key_exists("location",$_GET) ? $_GET['location'] : "Montreal, QC";
 ?>
 <!doctype html>
@@ -43,11 +55,7 @@
 <p>Searching for venues near <?php echo $location; ?></p>
 <hr />
 <?php 
-	// Set your client key and secret
-	$client_key = "your client key";
-	$client_secret = "you client secret";
-	// Load the Foursquare API library
-	$foursquare = new FoursquareAPI($client_key,$client_secret);
+	
 	
 	// Generate a latitude/longitude pair using Google Maps API
 	list($lat,$lng) = $foursquare->GeoLocate($location);
@@ -72,7 +80,7 @@
 					}
 					else
 						echo '<image class="icon" src="https://foursquare.com/img/categories/building/default_88.png"/>';
-					echo '<a href="'.$venue->canonicalUrl.'" target="_blank"/><b>';
+					echo '<a href="https://foursquare.com/v/'.$venue->id.'" target="_blank"/><b>';
 					echo $venue->name;
 					echo "</b></a><br/>";
 					
