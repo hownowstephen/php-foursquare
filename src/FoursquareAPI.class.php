@@ -254,7 +254,7 @@ class FoursquareApi {
 	public function SetAccessToken($token){
 		$this->AuthToken = $token;
 	}
-	
+
 	/**
 	 * AuthenticationLink
 	 * Returns a link to the Foursquare web authentication page.

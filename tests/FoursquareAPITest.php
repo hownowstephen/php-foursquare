@@ -23,6 +23,23 @@ class FoursquareAPITest extends PHPUnit_Framework_TestCase {
         $this->assertLessThan(400, $venues->meta->code, $venues->meta->errorDetail);
     }
 
+    public function testLanguageSupport(){   
+        $foursquare = new FoursquareAPI(CLIENT_ID, CLIENT_SECRET, '', 'v2', 'fr');
+        $categories = json_decode($foursquare->GetPublic('venues/categories'));
+
+        foreach($categories->response->categories as $category){
+            if($category->id == '4d4b7104d754a06370d81259'){
+                $this->assertEquals($category->name, 'Culture et loisirs', "Locale failed or \"{$category->name}\" is a new translation");
+                $run = true;
+                break;
+            }
+        }
+
+        $this->assertEquals($run, true, 'Test category no longer exists in fr locale, update test.');
+        // Ensure we get a success response
+        $this->assertLessThan(400, $venues->meta->code, $venues->meta->errorDetail);
+    }
+
     public function testPrivateEndpoint(){
 
         // Load the API and set the token
