@@ -62,6 +62,21 @@ $token = $foursquare->GetToken($code, $redirect_url);
 // and here is where you would store the token for future usage
 ```
 
+### Adding features & testing
+
+If you want to commit features, please also update the [tests/FoursquareAPITest.php](tests/FoursquareAPITest.php) file with a proper unit test - this will ensure changes can be accepted more quickly.
+
+Running tests requires phpunit, and can be run as the following:
+
+```
+export FOURSQUARE_CLIENT_ID=<your client id>
+export FOURSQUARE_CLIENT_SECRET=<your client secret>
+export FOURSQUARE_TOKEN=<your access token>
+phpunit --bootstrap src/FoursquareAPI.class.php tests/FoursquareAPITest.php
+```
+
+**PROTIP**: The easiest way to get an access token to test with is to [look yourself up in the api explorer](https://developer.foursquare.com/docs/explore#req=users/self) and pull it directly from the grayed-out url information (OAuth token automatically added. https://api.foursquare.com/v2/users/self?oauth_token=...) underneath the input box.
+
 ### What else do I need?
 
 This library does not deal with the management of your tokens - only the interaction between your code and the Foursquare API. If you are using it in an application that needs to use user data via an auth_token, you will need to store the token across sessions separately from the library.
