@@ -163,7 +163,7 @@ class FoursquareApi {
 	 * @param String $url The base url to query
 	 * @param Array $params The parameters to pass to the request
 	 */
-	private function Request($url,$params=false,$type=HTTP_GET){
+	private function Request($url, $params=false, $type=HTTP_GET){
 		
 		// Populate data for the GET request
 		if($type == HTTP_GET) $url = $this->MakeUrl($url,$params);
@@ -179,7 +179,7 @@ class FoursquareApi {
 			curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US) AppleWebKit/525.13 (KHTML, like Gecko) Chrome/0.X.Y.Z Safari/525.13.');
 		}
 		curl_setopt($ch, CURLOPT_TIMEOUT, 30);
-		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
 		$acceptLanguage[] = "Accept-Language:" . $this->ClientLanguage;
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $acceptLanguage); 
 		// Populate the data for POST
