@@ -4,14 +4,18 @@
  * A PHP-based Foursquare client library with a focus on simplicity and ease of integration
  * 
  * @package php-foursquare 
- * @author Stephen Young <stephen@tryllo.com>, @stephenyoungdev
- * @version 1.0.0
+ * @author Stephen Young <me@hownowstephen.com>, @hownowstephen
+ * @version 1.1.0
  * @license GPLv3 <http://www.gnu.org/licenses/gpl.txt>
  */
 
-// ???
-DEFINE("HTTP_GET","GET");
-DEFINE("HTTP_POST","POST");
+// Set the default version
+// @TODO: Warning when the version becomes too out of date
+define("DEFAULT_VERSION", "20140201");
+
+// I have no explanation as to why this is necessary
+define("HTTP_GET","GET");
+define("HTTP_POST","POST");
 
 /**
  * FoursquareApi
@@ -28,8 +32,8 @@ class FoursquareApi {
 	private $BaseUrl = "https://api.foursquare.com/";
 	/** @var String $AuthUrl The url for obtaining the auth access code */
 	private $AuthUrl = "https://foursquare.com/oauth2/authenticate";
-  /** @var String $AuthorizeUrl The url for obtaining an auth token, reprompting even if logged in */
-  private $AuthorizeUrl = "https://foursquare.com/oauth2/authorize";
+	/** @var String $AuthorizeUrl The url for obtaining an auth token, reprompting even if logged in */
+	private $AuthorizeUrl = "https://foursquare.com/oauth2/authorize";
 	/** @var String $TokenUrl The url for obtaining an auth token */
 	private $TokenUrl = "https://foursquare.com/oauth2/access_token";
 	
@@ -58,7 +62,7 @@ class FoursquareApi {
      * @param string $language
      * @param string $api_version https://developer.foursquare.com/overview/versioning
      */
-	public function  __construct($client_id = false,$client_secret = false, $redirect_uri='', $version='v2', $language='en', $api_version='20120228'){
+	public function  __construct($client_id = false,$client_secret = false, $redirect_uri='', $version='v2', $language='en', $api_version=DEFAULT_VERSION){
 		$this->BaseUrl = "{$this->BaseUrl}$version/";
 		$this->ClientID = $client_id;
 		$this->ClientSecret = $client_secret;
