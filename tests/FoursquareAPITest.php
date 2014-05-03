@@ -52,4 +52,15 @@ class FoursquareAPITest extends PHPUnit_Framework_TestCase {
         // Ensure we get a success response
         $this->assertLessThan(400, $venues->meta->code, $venues->meta->errorDetail);
     }
+
+    public function testCheckin(){
+
+        $foursquare = new FoursquareAPI(CLIENT_ID, CLIENT_SECRET);
+        $foursquare->SetAccessToken(TOKEN);
+
+        // Checks the acting user in at Aux Vivres in Montreal, Canada
+        $response = json_decode($foursquare->GetPrivate("checkins/add", array("venueId"=>"4ad4c06bf964a5207ff920e3"), $POST=true));
+
+        $this->assertLessThan(400, $response->meta->code, $response->meta->errorDetail);
+    }
 }
