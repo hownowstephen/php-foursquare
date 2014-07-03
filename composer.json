@@ -1,0 +1,7 @@
+{
+    "name": "hownowstephen/php-foursquare",
+    "description": "A simple PHP library for accessing the foursquare API (see: https://developer.foursquare.com)",
+    "require": {
+        "php": ">=5.2.0"
+    }
+}
