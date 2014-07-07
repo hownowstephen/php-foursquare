@@ -1,6 +1,22 @@
 ## Why another Foursquare library?
 
-I couldn't find a php library for the Foursquare API that encapsulated all the functionality of the API while still remaining easy to plug in to an application quickly. This library seeks to fill that need
+I couldn't find a php library for the Foursquare API that encapsulated all the functionality of the API while still remaining easy to plug in to an application quickly. This library seeks to fill that need.
+
+### Installation
+
+The best way to install Foursquare library is to use [Composer](https://getcomposer.org/):
+
+```
+composer require hownowstephen/php-foursquare:'1.1.*'
+```
+
+If you are not using an autoloader, you need to require_once the autoload file:
+
+```
+require_once 'vendor/autoload.php';
+```
+
+Another way to install is to download the latest version directly from this repository.
 
 ### Usage
 
