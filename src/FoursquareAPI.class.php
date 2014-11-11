@@ -51,6 +51,8 @@ class FoursquareApi {
 	private $AuthToken;
 	/** @var String $ClientLanguage */
 	private $ClientLanguage;
+    /** @var String[] $ResponseHeaders */
+    public $ResponseHeaders = array();
 
     /**
      * Constructor for the API
@@ -168,6 +170,9 @@ class FoursquareApi {
 		// Populate data for the GET request
 		if($type == HTTP_GET) $url = $this->MakeUrl($url,$params);
 
+        // Reset the headers every time we initiate a new request
+        $this->ResponseHeaders = array();
+
 		// borrowed from Andy Langton: http://andylangton.co.uk/
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL,$url);
@@ -181,7 +186,9 @@ class FoursquareApi {
 		curl_setopt($ch, CURLOPT_TIMEOUT, 30);
 		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
 		$acceptLanguage[] = "Accept-Language:" . $this->ClientLanguage;
-		curl_setopt($ch, CURLOPT_HTTPHEADER, $acceptLanguage); 
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $acceptLanguage);
+        // Set the header callback
+        curl_setopt($ch, CURLOPT_HEADERFUNCTION, array($this, 'ParseHeaders'));
 		// Populate the data for POST
 		if($type == HTTP_POST) {
 			curl_setopt($ch, CURLOPT_POST, 1); 
@@ -194,6 +201,22 @@ class FoursquareApi {
 		
 		return $result;
 	}
+
+    /**
+     * Callback function to handle header strings as they are returned by cUrl in the $this->Request() function
+     * Parses header strings into key/value pairs and stores them in $ResponseHeaders array
+     *
+     * @param $ch
+     * @param $header
+     * @return int
+     */
+    private function ParseHeaders($ch, $header) {
+        if (strpos($header, ':') !== false) {
+            $header_split = explode(':', $header);
+            $this->ResponseHeaders[strtolower(trim($header_split[0]))] = trim($header_split[1]);
+        }
+        return strlen($header);
+    }
 
 	/**
 	 * GET
