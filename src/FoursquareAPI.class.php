@@ -53,6 +53,8 @@ class FoursquareApi {
 	private $ClientLanguage;
     /** @var String[] $ResponseHeaders */
     public $ResponseHeaders = array();
+    /** @var String last url sent */
+    public $LastUrl;
 
     /**
      * Constructor for the API
@@ -169,6 +171,8 @@ class FoursquareApi {
 		
 		// Populate data for the GET request
 		if($type == HTTP_GET) $url = $this->MakeUrl($url,$params);
+
+        $this->LastUrl = $url;
 
         // Reset the headers every time we initiate a new request
         $this->ResponseHeaders = array();
