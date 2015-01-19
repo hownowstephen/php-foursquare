@@ -2,13 +2,13 @@
 
 	require_once('../vendor' . DIRECTORY_SEPARATOR . 'autoload.php');
 
-	use FoursquareAPI\FoursquareAPI;
+	use FoursquareApi\FoursquareApi;
 
 	DEFINE('CLIENT_ID', getenv('FOURSQUARE_CLIENT_ID'));
 	DEFINE('CLIENT_SECRET', getenv('FOURSQUARE_CLIENT_SECRET'));
 	DEFINE('TOKEN', getenv('FOURSQUARE_TOKEN'));
 
-	class FoursquareAPITest extends PHPUnit_Framework_TestCase {
+	class FoursquareApiTest extends PHPUnit_Framework_TestCase {
 
 		public function testPublicEnvironment(){
 			$this->assertFalse(CLIENT_ID == false, "Must set the FOURSQUARE_CLIENT_ID environment variable to run public tests");
@@ -20,7 +20,7 @@
 		}
 
 		public function testPublicEndpoint(){
-			$foursquare = new FoursquareAPI(CLIENT_ID, CLIENT_SECRET);
+			$foursquare = new FoursquareApi(CLIENT_ID, CLIENT_SECRET);
 			$venues = json_decode($foursquare->GetPublic('venues/search', array('near'=>'Montreal, QC')));
 
 			// Ensure we get a success response
@@ -28,7 +28,7 @@
 		}
 
 		public function testLanguageSupport(){
-			$foursquare = new FoursquareAPI(CLIENT_ID, CLIENT_SECRET, '', 'v2', 'fr');
+			$foursquare = new FoursquareApi(CLIENT_ID, CLIENT_SECRET, '', 'v2', 'fr');
 			$categories = json_decode($foursquare->GetPublic('venues/categories'));
 
 			foreach($categories->response->categories as $category){
@@ -47,7 +47,7 @@
 		public function testPrivateEndpoint(){
 
 			// Load the API and set the token
-			$foursquare = new FoursquareAPI(CLIENT_ID, CLIENT_SECRET);
+			$foursquare = new FoursquareApi(CLIENT_ID, CLIENT_SECRET);
 			$foursquare->SetAccessToken(TOKEN);
 
 			// Load response & convert to Stdclass object
@@ -59,7 +59,7 @@
 
 		public function testCheckin(){
 
-			$foursquare = new FoursquareAPI(CLIENT_ID, CLIENT_SECRET);
+			$foursquare = new FoursquareApi(CLIENT_ID, CLIENT_SECRET);
 			$foursquare->SetAccessToken(TOKEN);
 
 			// Checks the acting user in at Aux Vivres in Montreal, Canada

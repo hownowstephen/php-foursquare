@@ -1,7 +1,7 @@
 <?php
 	require_once('../vendor' . DIRECTORY_SEPARATOR . 'autoload.php');
 
-	use FoursquareAPI\FoursquareAPI;
+	use FoursquareApi\FoursquareApi;
 
 	$name = array_key_exists("name",$_GET) ? $_GET['name'] : "Foursquare";
 
@@ -28,7 +28,7 @@
 	// Set your auth token, loaded using the workflow described in tokenrequest.php
 	$auth_token = "<your auth token>";
 	// Load the Foursquare API library
-	$foursquare = new FoursquareAPI($client_key,$client_secret);
+	$foursquare = new FoursquareApi($client_key,$client_secret);
 	$foursquare->SetAccessToken($auth_token);
 
 	// Prepare parameters

@@ -1,7 +1,7 @@
 <?php
 	require_once('../vendor' . DIRECTORY_SEPARATOR . 'autoload.php');
 
-	use FoursquareAPI\FoursquareAPI;
+	use FoursquareApi\FoursquareApi;
 
 	// Set your client key and secret
 	$client_key = "";
@@ -14,7 +14,7 @@
         exit;
 	}
 
-	$foursquare = new FoursquareAPI($client_key,$client_secret);
+	$foursquare = new FoursquareApi($client_key,$client_secret);
 	$location = array_key_exists("location",$_GET) ? $_GET['location'] : "Montreal, QC";
 ?>
 <!doctype html>

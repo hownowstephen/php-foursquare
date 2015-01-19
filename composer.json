@@ -6,7 +6,7 @@
 	},
 	"autoload": {
 		"psr-4": {
-			"FoursquareAPI\\": "src/FoursquareAPI/"
+			"FoursquareApi\\": "src/FoursquareApi/"
 		}
 	}
 }

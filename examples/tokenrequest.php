@@ -1,7 +1,7 @@
 <?php
 	require_once('../vendor' . DIRECTORY_SEPARATOR . 'autoload.php');
 
-	use FoursquareAPI\FoursquareAPI;
+	use FoursquareApi\FoursquareApi;
 
 	// This file is intended to be used as your redirect_uri for the client on Foursquare
 
@@ -11,7 +11,7 @@
 	$redirect_uri = "<your redirect uri>";
 
 	// Load the Foursquare API library
-	$foursquare = new FoursquareAPI($client_key,$client_secret);
+	$foursquare = new FoursquareApi($client_key,$client_secret);
 
 	// If the link has been clicked, and we have a supplied code, use it to request a token
 	if(array_key_exists("code",$_GET)){
