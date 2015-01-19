@@ -25,7 +25,7 @@ This library wrappers for php applications to make requests to both public and a
 #### Querying the API
 
 ```php
-$foursquare = new FoursquareAPI("<your client key>", "<your client secret>");
+$foursquare = new FoursquareApi("<your client key>", "<your client secret>");
 
 // Searching for venues nearby Montreal, Quebec
 $endpoint = "venues/search";
@@ -58,7 +58,7 @@ $me = $foursquare->GetPrivate($endpoint_private);
 #### Authenticating the user (see [examples/tokenrequest.php](examples/tokenrequest.php))
 
 ```php
-$foursquare = new FoursquareAPI("<your client key>", "<your client secret>");
+$foursquare = new FoursquareApi("<your client key>", "<your client secret>");
 
 // Some real url that accepts a foursquare code (see examples/tokenrequest.php)
 // This URL should match exactly the URL given in your foursquare developer account settings
@@ -80,7 +80,7 @@ $token = $foursquare->GetToken($code, $redirect_url);
 
 ### Adding features & testing
 
-If you want to commit features, please also update the [tests/FoursquareAPITest.php](tests/FoursquareAPITest.php) file with a proper unit test - this will ensure changes can be accepted more quickly.
+If you want to commit features, please also update the [tests/FoursquareApiTest.php](tests/FoursquareApiTest.php) file with a proper unit test - this will ensure changes can be accepted more quickly.
 
 Running tests requires phpunit, and can be run as the following:
 
@@ -88,7 +88,7 @@ Running tests requires phpunit, and can be run as the following:
 export FOURSQUARE_CLIENT_ID=<your client id>
 export FOURSQUARE_CLIENT_SECRET=<your client secret>
 export FOURSQUARE_TOKEN=<your access token>
-phpunit --bootstrap src/FoursquareAPI.class.php tests/FoursquareAPITest.php
+phpunit --bootstrap src/FoursquareApi.class.php tests/FoursquareApiTest.php
 ```
 
 **PROTIP**: The easiest way to get an access token to test with is to [look yourself up in the api explorer](https://developer.foursquare.com/docs/explore#req=users/self) and pull it directly from the grayed-out url information (OAuth token automatically added. https://api.foursquare.com/v2/users/self?oauth_token=...) underneath the input box.

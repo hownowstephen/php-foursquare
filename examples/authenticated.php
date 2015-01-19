@@ -1,6 +1,10 @@
-<?php 
-	require_once("../src/FoursquareAPI.class.php");
+<?php
+	require_once('../vendor' . DIRECTORY_SEPARATOR . 'autoload.php');
+
+	use FoursquareApi\FoursquareApi;
+
 	$name = array_key_exists("name",$_GET) ? $_GET['name'] : "Foursquare";
+
 ?>
 <!doctype html>
 <html>
@@ -17,38 +21,38 @@
 	</form>
 <p>Searching for users with name similar to <?php echo $name; ?></p>
 <hr />
-<?php 
+<?php
 	// Set your client key and secret
 	$client_key = "<your client key>";
-	$client_secret = "<your client secret>";  
+	$client_secret = "<your client secret>";
 	// Set your auth token, loaded using the workflow described in tokenrequest.php
 	$auth_token = "<your auth token>";
 	// Load the Foursquare API library
-	$foursquare = new FoursquareAPI($client_key,$client_secret);
+	$foursquare = new FoursquareApi($client_key,$client_secret);
 	$foursquare->SetAccessToken($auth_token);
-	
+
 	// Prepare parameters
 	$params = array("name"=>$name);
-	
+
 	// Perform a request to a authenticated-only resource
 	$response = $foursquare->GetPrivate("users/search",$params);
 	$users = json_decode($response);
-	
+
 	// NOTE:
 	// Foursquare only allows for 500 api requests/hr for a given client (meaning the below code would be
 	// a very inefficient use of your api calls on a production application). It would be a better idea in
 	// this scenario to have a caching layer for user details and only request the details of users that
-	// you have not yet seen. Alternatively, several client keys could be tried in a round-robin pattern 
+	// you have not yet seen. Alternatively, several client keys could be tried in a round-robin pattern
 	// to increase your allowed requests.
-	
+
 ?>
 	<ul>
 		<?php foreach($users->response->results as $user): ?>
 			<li>
-				<?php 
+				<?php
 					if(property_exists($user,"firstName")) echo $user->firstName . " ";
 					if(property_exists($user,"lastName")) echo $user->lastName;
-					
+
 					// Grab user twitter details
 					$request = $foursquare->GetPrivate("users/{$user->id}");
 					$details = json_decode($request);
@@ -56,9 +60,9 @@
 					if(property_exists($u->contact,"twitter")){
 						echo " -- follow this user <a href=\"http://www.twitter.com/{$u->contact->twitter}\">@{$u->contact->twitter}</a>";
 					}
-					
+
 				?>
-			
+
 			</li>
 		<?php endforeach; ?>
 	</ul>
