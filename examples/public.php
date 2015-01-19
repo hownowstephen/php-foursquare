@@ -1,5 +1,8 @@
-<?php 
-	require_once("../src/FoursquareAPI.class.php");
+<?php
+	require_once('../vendor' . DIRECTORY_SEPARATOR . 'autoload.php');
+
+	use FoursquareAPI\FoursquareAPI;
+
 	// Set your client key and secret
 	$client_key = "";
 	$client_secret = "";
@@ -20,7 +23,7 @@
 	<title>PHP-Foursquare :: Unauthenticated Request Example</title>
 	<style>
 	div.venue
-	{   
+	{
 		float: left;
 		padding: 10px;
 		background: #efefef;
@@ -54,25 +57,25 @@
 	</form>
 <p>Searching for venues near <?php echo $location; ?></p>
 <hr />
-<?php 
-	
-	
+<?php
+
+
 	// Generate a latitude/longitude pair using Google Maps API
 	list($lat,$lng) = $foursquare->GeoLocate($location);
-	
-	
+
+
 	// Prepare parameters
 	$params = array("ll"=>"$lat,$lng");
-	
+
 	// Perform a request to a public resource
 	$response = $foursquare->GetPublic("venues/search",$params);
 	$venues = json_decode($response);
 ?>
-	
+
 		<?php foreach($venues->response->venues as $venue): ?>
 			<div class="venue">
-				<?php 
-					
+				<?php
+
 
 					if(isset($venue->categories['0']))
 					{
@@ -83,9 +86,9 @@
 					echo '<a href="https://foursquare.com/v/'.$venue->id.'" target="_blank"/><b>';
 					echo $venue->name;
 					echo "</b></a><br/>";
-					
-					
-						
+
+
+
                     if(isset($venue->categories['0']))
                     {
 						if(property_exists($venue->categories['0'],"name"))
@@ -93,19 +96,19 @@
 							echo ' <i> '.$venue->categories['0']->name.'</i><br/>';
 						}
 					}
-					
+
 					if(property_exists($venue->hereNow,"count"))
 					{
 							echo ''.$venue->hereNow->count ." people currently here <br/> ";
 					}
 
                     echo '<b><i>History</i></b> :'.$venue->stats->usersCount." visitors , ".$venue->stats->checkinsCount." visits ";
-					
+
 				?>
-			
+
 			</div>
-			
+
 		<?php endforeach; ?>
-	
+
 </body>
 </html>
