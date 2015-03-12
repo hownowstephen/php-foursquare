@@ -4,6 +4,8 @@ namespace FoursquareApi;
 
 use \Exception;
 
-class FoursquareApiException extends Exception {
+class FoursquareApiException
+    extends Exception
+{
 
 }
