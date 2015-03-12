@@ -7,7 +7,7 @@ I couldn't find a php library for the Foursquare API that encapsulated all the f
 The best way to install Foursquare library is to use [Composer](https://getcomposer.org/):
 
 ```
-composer require gilberg-vrn/php-foursquare:'1.1.*'
+composer require gilberg-vrn/php-foursquare:'dev-master'
 ```
 
 If you are not using an autoloader, you need to require_once the autoload file:
