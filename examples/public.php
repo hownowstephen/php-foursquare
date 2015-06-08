@@ -1,5 +1,5 @@
 <?php 
-	require_once("../src/FoursquareAPI.class.php");
+	require_once("../src/FoursquareApi.class.php");
 	// Set your client key and secret
 	$client_key = "";
 	$client_secret = "";
@@ -11,7 +11,7 @@
         exit;
 	}
 
-	$foursquare = new FoursquareAPI($client_key,$client_secret);
+	$foursquare = new FoursquareApi($client_key,$client_secret);
 	$location = array_key_exists("location",$_GET) ? $_GET['location'] : "Montreal, QC";
 ?>
 <!doctype html>
