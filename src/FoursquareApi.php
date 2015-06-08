@@ -5,7 +5,7 @@
  * 
  * @package php-foursquare 
  * @author Stephen Young <me@hownowstephen.com>, @hownowstephen
- * @version 1.1.0
+ * @version 1.2.0
  * @license GPLv3 <http://www.gnu.org/licenses/gpl.txt>
  */
 
