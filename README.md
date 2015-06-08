@@ -7,7 +7,7 @@ I couldn't find a php library for the Foursquare API that encapsulated all the f
 The best way to install Foursquare library is to use [Composer](https://getcomposer.org/):
 
 ```
-composer require hownowstephen/php-foursquare:'1.1.*'
+composer require hownowstephen/php-foursquare:'1.2.*'
 ```
 
 If you are not using an autoloader, you need to require_once the autoload file:
@@ -25,7 +25,7 @@ This library wrappers for php applications to make requests to both public and a
 #### Querying the API
 
 ```php
-$foursquare = new FoursquareAPI("<your client key>", "<your client secret>");
+$foursquare = new FoursquareApi("<your client key>", "<your client secret>");
 
 // Searching for venues nearby Montreal, Quebec
 $endpoint = "venues/search";
@@ -38,7 +38,7 @@ $response = $foursquare->GetPublic($endpoint,$params);
 
 // Returns a list of Venues
 // $POST defaults to false
-$venues = $api->GetPublic($endpoint [,$params], $POST=false);
+$venues = $foursquare->GetPublic($endpoint [,$params], $POST=false);
 		
 // Note: You don't need to add client_id, client_secret, or version to $params
 
@@ -58,7 +58,7 @@ $me = $foursquare->GetPrivate($endpoint_private);
 #### Authenticating the user (see [examples/tokenrequest.php](examples/tokenrequest.php))
 
 ```php
-$foursquare = new FoursquareAPI("<your client key>", "<your client secret>");
+$foursquare = new FoursquareApi("<your client key>", "<your client secret>");
 
 // Some real url that accepts a foursquare code (see examples/tokenrequest.php)
 // This URL should match exactly the URL given in your foursquare developer account settings
@@ -88,7 +88,7 @@ Running tests requires phpunit, and can be run as the following:
 export FOURSQUARE_CLIENT_ID=<your client id>
 export FOURSQUARE_CLIENT_SECRET=<your client secret>
 export FOURSQUARE_TOKEN=<your access token>
-phpunit --bootstrap src/FoursquareAPI.class.php tests/FoursquareAPITest.php
+phpunit --bootstrap src/FoursquareApi.php tests/FoursquareAPITest.php
 ```
 
 **PROTIP**: The easiest way to get an access token to test with is to [look yourself up in the api explorer](https://developer.foursquare.com/docs/explore#req=users/self) and pull it directly from the grayed-out url information (OAuth token automatically added. https://api.foursquare.com/v2/users/self?oauth_token=...) underneath the input box.
