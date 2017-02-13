@@ -1,5 +1,5 @@
 <?php 
-	require_once("../src/FoursquareApi.class.php");
+	require_once("../src/FoursquareApi.php");
 	// Set your client key and secret
 	$client_key = "";
 	$client_secret = "";
@@ -68,6 +68,14 @@
 	$response = $foursquare->GetPublic("venues/search",$params);
 	$venues = json_decode($response);
 ?>
+
+	<?php if($venues->meta->code != 200){ ?>
+		<div class="error">Couldn't find any venues, got <strong><?php echo $venues->meta->errorType . ": " . $venues->meta->errorDetail; ?></strong></div>
+	<?php
+		exit;
+	}
+	?>
+
 	
 		<?php foreach($venues->response->venues as $venue): ?>
 			<div class="venue">
