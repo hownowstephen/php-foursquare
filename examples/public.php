@@ -3,6 +3,8 @@
 	// Set your client key and secret
 	$client_key = "";
 	$client_secret = "";
+	// Google Maps GeoLocate API key
+	$geoapi_key = "";
 	// Load the Foursquare API library
 
 	if($client_key=="" or $client_secret=="")
