@@ -248,9 +248,9 @@ class FoursquareApi {
 	 * @param String $addr An address string accepted by the google maps api
 	 * @return array(lat, lng) || NULL
 	 */
-	public function GeoLocate($addr){
-		$geoapi = "http://maps.googleapis.com/maps/api/geocode/json";
-		$params = array("address"=>$addr,"sensor"=>"false");
+	public function GeoLocate($addr, $geoapi_key){
+		$geoapi = "https://maps.googleapis.com/maps/api/geocode/json";
+		$params = array("address"=>$addr,"sensor"=>"false","key"=>$geoapi_key);
 		$response = $this->GET($geoapi,$params);
 		$json = json_decode($response);
 		if ($json->status === "ZERO_RESULTS") {
